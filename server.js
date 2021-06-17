@@ -29,11 +29,13 @@ app.use(cookieParser());
 const portfolioRoutes = require('./routes/portfolios');
 const authRoutes = require('./routes/auth');
 const communicationRoutes = require('./routes/communications');
+const contactRoutes = require('./routes/contacts');
 
 // Mount routes to server
 app.use('/api/v1/portfolios', portfolioRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/communications', communicationRoutes);
+app.use('/api/v1/contacts', contactRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

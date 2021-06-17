@@ -63,6 +63,22 @@ exports.getCommunications = asyncHandler(async (req, res, next) => {
     });
 });
 
+// @desc        Get a single communication
+// @route       GET /api/v1/communication/:id
+// @access      Private
+exports.getCommunication = asyncHandler(async (req, res, next) => {
+    // find communication
+    const communication = await Communication.findById(req.params.id)
+        .populate('createdBy')
+        .populate('portfolio');
+    
+    if (!communication) {
+        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+    }
+
+    res.status(201).json({ success: true, data: communication });
+});
+
 // @desc        Create a new communication
 // @route       POST /api/v1/communication
 // @access      Private
@@ -73,4 +89,38 @@ exports.createCommunication = asyncHandler(async (req, res, next) => {
     const newCommunication = await Communication.create(req.body);
     // return data
     res.status(201).json({ success: true, data: newCommunication });
+});
+
+// @desc        Update single communication
+// @route       PUT /api/v1/communication/:id
+// @access      Private
+exports.updateCommunication = asyncHandler(async (req, res, next) => {
+    // find communication and update
+    const communication = await Communication.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+
+    if (!communication) {
+        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+    }
+
+    res.status(201).json({ success: true, data: communication });
+});
+
+// @desc        Delete single communication
+// @route       DELETE /api/v1/communication/:id
+// @access      Private
+exports.deleteCommunication = asyncHandler(async (req, res, next) => {
+    // find communication
+    const communication = await Communication.findById(req.params.id);
+
+    if (!communication) {
+        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+    }
+
+    // delete communication
+    await communication.remove();
+
+    res.status(201).json({ success: true, data: {} });
 });

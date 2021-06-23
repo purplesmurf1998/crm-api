@@ -19,6 +19,13 @@ exports.getCommunications = asyncHandler(async (req, res, next) => {
     query = Communication.find(JSON.parse(queryStr))
         .populate('createdBy')
         .populate('portfolio')
+        .populate({ 
+            path: 'contacts',
+            select: 'portfolio contact',
+            populate: {
+                path: 'portfolio contact'
+            }
+         });
     // select fields
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');
@@ -68,12 +75,13 @@ exports.getCommunications = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.getCommunication = asyncHandler(async (req, res, next) => {
     // find communication
-    const communication = await Communication.findById(req.params.id)
+    const communication = await Communication.findById(req.params.commId)
         .populate('createdBy')
-        .populate('portfolio');
+        .populate('portfolio')
+        .populate('contacts').select('portfolio contact');
     
     if (!communication) {
-        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Not communication found with id ${req.params.commId}`, 404));
     }
 
     res.status(201).json({ success: true, data: communication });
@@ -96,13 +104,13 @@ exports.createCommunication = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.updateCommunication = asyncHandler(async (req, res, next) => {
     // find communication and update
-    const communication = await Communication.findByIdAndUpdate(req.params.id, req.body, {
+    const communication = await Communication.findByIdAndUpdate(req.params.commId, req.body, {
         new: true,
         runValidators: true
     });
 
     if (!communication) {
-        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Not communication found with id ${req.params.commId}`, 404));
     }
 
     res.status(201).json({ success: true, data: communication });
@@ -113,10 +121,10 @@ exports.updateCommunication = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.deleteCommunication = asyncHandler(async (req, res, next) => {
     // find communication
-    const communication = await Communication.findById(req.params.id);
+    const communication = await Communication.findById(req.params.commId);
 
     if (!communication) {
-        return next(new ErrorResponse(`Not communication found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Not communication found with id ${req.params.commId}`, 404));
     }
 
     // delete communication

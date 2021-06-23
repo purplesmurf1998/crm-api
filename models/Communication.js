@@ -33,7 +33,13 @@ const CommunicationSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Portfolio',
         required: [true, 'Please provide the portfolio associated to the communication']
-    }
+    },
+    contacts: [
+        {
+            type: mongoose.Schema.ObjectId,
+            ref: 'ContactInPortfolio',
+        }
+    ]
 });
 
 module.exports = mongoose.model('Communication', CommunicationSchema);

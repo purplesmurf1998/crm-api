@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 // Load environment variables from config.env
 dotenv.config({ path: './config/config.env' });
@@ -24,6 +25,9 @@ app.use(express.json());
 
 // Cookie parser
 app.use(cookieParser());
+
+// Cors
+app.use(cors());
 
 // Import routes
 const portfolioRoutes = require('./routes/portfolios');

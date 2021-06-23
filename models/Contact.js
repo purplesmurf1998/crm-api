@@ -39,7 +39,6 @@ const ContactSchema = new mongoose.Schema({
 });
 
 ContactSchema.pre('save', function(next) {
-    console.log("Contact.js[45] === " + this);
     let fullname = ""
     if (!this.firstname) {
         fullname = this.lastname;

@@ -73,13 +73,13 @@ exports.getPortfolios = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.getPortfolio = asyncHandler(async (req, res, next) => {
     // find portfolio
-    const portfolio = await Portfolio.findById(req.params.id)
+    const portfolio = await Portfolio.findById(req.params.portId)
         .populate('succession')
         .populate('institutional')
         .populate('trust');
     // return error if nothing found
     if (!portfolio) {
-        return next(new ErrorResponse(`Portfolio not found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Portfolio not found with id ${req.params.portId}`, 404));
     }
     // return data
     res.status(200).json({ success: true, data: portfolio });
@@ -139,7 +139,7 @@ exports.updatePortfolio = asyncHandler(async (req, res, next) => {
     }
     
     // find portfolio to update
-    const portfolio = await Portfolio.findByIdAndUpdate(req.params.id, body, {
+    const portfolio = await Portfolio.findByIdAndUpdate(req.params.portId, body, {
         new: true,
         runValidators: true
     })
@@ -148,7 +148,7 @@ exports.updatePortfolio = asyncHandler(async (req, res, next) => {
     .populate('trust');
     // return error if no portfolio found
     if (!portfolio) {
-        return next(new ErrorResponse(`Portfolio not found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Portfolio not found with id ${req.params.portId}`, 404));
     }
     // return data
     res.status(200).json({ success: true, data: portfolio });
@@ -159,10 +159,10 @@ exports.updatePortfolio = asyncHandler(async (req, res, next) => {
 // @access      Private
 exports.deletePortfolio = asyncHandler(async (req, res, next) => {
     // find portfolio to delete
-    const portfolio = await Portfolio.findById(req.params.id);
+    const portfolio = await Portfolio.findById(req.params.portId);
     // return error if no portfolio found
     if (!portfolio) {
-        return next(new ErrorResponse(`Portfolio not found with id ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Portfolio not found with id ${req.params.portId}`, 404));
     }
     // delete portfolio
     portfolio.remove();

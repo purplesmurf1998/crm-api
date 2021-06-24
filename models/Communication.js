@@ -36,7 +36,7 @@ const CommunicationSchema = new mongoose.Schema({
     },
     contacts: [
         {
-            type: mongoose.Schema.ObjectId,
+            type: [mongoose.Schema.ObjectId],
             ref: 'ContactInPortfolio',
         }
     ]

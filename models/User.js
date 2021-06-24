@@ -18,8 +18,17 @@ const UserSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['account_manager', 'account_associate', 'manager', 'guest'],
+        enum: ['account_manager', 'team_manager', 'admin', 'maintenance'],
         default: 'guest'
+    },
+    privileges: {
+        type: [String],
+        default: ['user'],
+        enum: [
+            'institutional', 
+            'succession', 
+            'all',
+        ]
     },
     password: {
         type: String,
